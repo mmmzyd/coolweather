@@ -271,7 +271,7 @@ public class ChooseAreaFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtils.d("onFailure",e.getMessage());
+                LogUtils.d("请求天气异常1",e.getMessage());
                 // 通过runOnUiThread()方法回到主线程处理逻辑
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

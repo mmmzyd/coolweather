@@ -1,8 +1,10 @@
 package android.coolweather.com.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.coolweather.com.coolweather.gson.Forecast;
 import android.coolweather.com.coolweather.gson.Weather;
+import android.coolweather.com.coolweather.service.AutoUpdateService;
 import android.coolweather.com.coolweather.util.HttpUtil;
 import android.coolweather.com.coolweather.util.LogUtils;
 import android.coolweather.com.coolweather.util.Utility;
@@ -151,6 +153,9 @@ public class WeatherActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 请求今日的必应背景图
+     */
     private void loadBingPic(){
         String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
@@ -222,7 +227,7 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 // 日志输出异常
-                LogUtils.d("onFailure", e.getMessage());
+                LogUtils.d("请求天气异常2", e.getMessage());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -238,7 +243,8 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     /**
-     * 从Weather对象中获取数据，显示到相应的空间上
+     * 从Weather对象中获取数据，显示到相应的控件上
+     * 处理并展示Weather实体类中的数据
      * @param weather
      */
     private void showWeatherInfo(Weather weather){
@@ -279,5 +285,8 @@ public class WeatherActivity extends AppCompatActivity {
         sportText.setText(sport);
         // 设置完所有数据之后，将ScrollView重新设置可见
         weatherLayout.setVisibility(View.VISIBLE);
+        // 启动自动更新服务
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 }
